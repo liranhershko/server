@@ -3,9 +3,10 @@ const http = require('http');
 const bodyParser = require('body-parser'); // parse incoming requests
 const morgan = require('morgan'); // logging middleware
 const app = express();
-const router = require('./router');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+const routesV1 = require('./routes/routesV1');
 
 // DB setup
 mongoose.connect('mongodb://localhost:auth/auth');
@@ -14,7 +15,9 @@ mongoose.connect('mongodb://localhost:auth/auth');
 app.use(morgan('combined'));
 app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }));
-router(app);
+
+// setting routes
+app.use('/v1', routesV1);
 
 // Server setup
 const port = process.env.PORT || 3090;
