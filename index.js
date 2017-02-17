@@ -5,11 +5,14 @@ const morgan = require('morgan'); // logging middleware
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
+const config = require('./config');
 
 const routesV1 = require('./routes/routesV1');
 
 // DB setup
-mongoose.connect('mongodb://localhost:auth/auth');
+const uri = `mongodb://localhost:27017/${config.dbName}`;
+mongoose.Promise = global.Promise;
+mongoose.connect(uri);
 
 // App setup
 app.use(morgan('combined'));

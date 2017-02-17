@@ -10,12 +10,13 @@ function tokenForUser(user) {
 exports.signin = function(req, res, next) {
   // User has already had their email and password auth'd
   // we just need to give them a token
-  res.send({ token: tokenForUser(req.user) }); // req.user is available from the done callback in the localLogin
+  res.send({ token: tokenForUser(req.user), userId: req.user._id  }); // req.user is available from the done callback in the localLogin
 };
 
 exports.signup = function(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
+  const name = req.body.name;
 
   if (!email || !password) {
     return res
@@ -34,14 +35,15 @@ exports.signup = function(req, res, next) {
 
     const user = new User({
       email: email,
-      password: password
+      password: password,
+      name: name
     });
     user.save(function(err) {
       if (err) {
         return next(err);
       }
 
-      res.json({ token: tokenForUser(user) });
+      res.json({ token: tokenForUser(user), userId: user._id });
     });
   });
 };
